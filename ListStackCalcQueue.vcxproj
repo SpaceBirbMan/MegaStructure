@@ -132,7 +132,6 @@
   <ItemGroup>
     <ClInclude Include="Chain2.h" />
     <ClInclude Include="HeavyIronWell.h" />
-    <ClInclude Include="Interface.h" />
     <ClInclude Include="Ladder3.h" />
     <ClInclude Include="Ladder3One.h" />
     <ClInclude Include="QSnake.h" />

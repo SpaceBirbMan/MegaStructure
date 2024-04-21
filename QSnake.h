@@ -1,75 +1,50 @@
 #pragma once
-#include "Interface.h"
+#include "Chain2.h"
 
 template<typename TYPE>
-class QSnake : public CustomStack<TYPE> {
+class QSnake
+{
 private:
     size_t queue_size = 0;
-    Level<TYPE>* front = nullptr;
-    Level<TYPE>* rear = nullptr;
+    Chain2<TYPE> queue;
 
 public:
+    /// <summary>
+    /// Инициализация пустой очереди
+    /// </summary>
     QSnake() {}
+    
+    /// Деструктор
+    ~QSnake() {}
 
-    ~QSnake() {
-        while (front != nullptr) {
-            Level<TYPE>* tmp = front;
-            front = front->getPrev();
-            delete tmp;
-        }
-    }
-
-    TYPE push() override {
-        if (front == nullptr) {
+   /// Вытягивание элемента
+    TYPE pull() {
+        if (queue.getSize() == 0) {
             throw std::out_of_range("Queue is empty");
         }
 
-        TYPE res = front->getData();
-        remove();
+        TYPE res = queue.getFirst()->getData();
+        queue.deleter.front();
         return res;
     }
 
-    void pull(TYPE data) override {
-        add(data);
+    /// Помещение элемента в очередь
+    void push(TYPE data) {
+        queue.adder.back(data);
     }
 
-    size_t getSize() override { return queue_size; }
+    /// <summary>
+    /// Получает размер очереди
+    /// </summary>
+    size_t getSize() { return queue.getSize(); }
 
-    std::string toString() override {
-        std::string result;
-        Level<TYPE>* current = front;
-        while (current != nullptr) {
-            result += std::to_string(current->getData()) + " ";
-            current = current->getPrev();
+    /// Выводит очередь строкой
+    std::string toString() {
+        std::vector<TYPE> elements = queue.toArray();
+        std::stringstream ss;
+        for (const auto& element : elements) {
+            ss << element << " ";
         }
-        return result;
-    }
-
-private:
-    void add(TYPE data) {
-        Level<TYPE>* next = new Level<TYPE>(data);
-        if (front == nullptr) {
-            front = next;
-        }
-        else {
-            rear->setPrev(next);
-        }
-        rear = next;
-        ++queue_size;
-    }
-
-    void remove() {
-        if (front == nullptr) {
-            return;
-        }
-
-        Level<TYPE>* tmp = front;
-        front = front->getPrev();
-        delete tmp;
-        --queue_size;
-        if (front == nullptr) {
-            rear = nullptr;
-        }
+        return ss.str();
     }
 };
-
