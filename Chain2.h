@@ -542,4 +542,54 @@ public:
         }
         return os;
     }
+
+    /// <summary>
+    /// Сортировка списка методом Radix Sort
+    /// </summary>
+    void radixSort() {
+        if (chain_size <= 1) {
+            return;
+        }
+
+        // Находим максимальное значение в списке
+        TYPE max = first_link->getData();
+        Link<TYPE>* current = first_link->getNext();
+        while (current != nullptr) {
+            if (current->getData() > max) {
+                max = current->getData();
+            }
+            current = current->getNext();
+        }
+
+        // Выполняем сортировку по разрядам
+        for (int exp = 1; max / exp > 0; exp *= 10) {
+            std::vector<std::vector<Link<TYPE>*>> buckets(10);
+
+            // Распределяем элементы по корзинам (buckets)
+            current = first_link;
+            while (current != nullptr) {
+                int index = (current->getData() / exp) % 10;
+                buckets[index].push_back(current);
+                current = current->getNext();
+            }
+
+            // Собираем элементы обратно в список
+            first_link = nullptr;
+            last_link = nullptr;
+            for (int i = 0; i < 10; ++i) {
+                for (Link<TYPE>* link : buckets[i]) {
+                    if (first_link == nullptr) {
+                        first_link = link;
+                    }
+                    if (last_link != nullptr) {
+                        last_link->setNext(link);
+                        link->setPrev(last_link);
+                    }
+                    link->setPrev(last_link);
+                    link->setNext(nullptr);
+                    last_link = link;
+                }
+            }
+        }
+    }
 };

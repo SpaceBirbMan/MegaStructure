@@ -213,13 +213,64 @@ void testPostFix() {
     }
 }
 
+void testRadixSort() {
+    // Тест случая с пустым списком
+    Chain2<int> emptyList;
+    emptyList.radixSort();
+    assert(emptyList.getSize() == 0);
 
+    // Тест случая с одним элементом
+    Chain2<int> singleElementList(42);
+    singleElementList.radixSort();
+    assert(singleElementList.getSize() == 1);
+    assert(singleElementList.getFirst()->getData() == 42);
+
+    // Тест случая, когда элементы уже отсортированы
+    Chain2<int> sortedList;
+    sortedList.adder.back(10);
+    sortedList.adder.back(20);
+    sortedList.adder.back(30);
+    sortedList.adder.back(40);
+    sortedList.adder.back(50);
+    sortedList.radixSort();
+    assert(sortedList.getSize() == 5);
+    assert(sortedList.getFirst()->getData() == 10);
+    assert(sortedList.getLast()->getData() == 50);
+
+    // Тест случая, когда элементы в обратном порядке
+    Chain2<int> reverseOrderList;
+    reverseOrderList.adder.back(50);
+    reverseOrderList.adder.back(40);
+    reverseOrderList.adder.back(30);
+    reverseOrderList.adder.back(20);
+    reverseOrderList.adder.back(10);
+    reverseOrderList.radixSort();
+    assert(reverseOrderList.getSize() == 5);
+    assert(reverseOrderList.getFirst()->getData() == 10);
+    assert(reverseOrderList.getLast()->getData() == 50);
+
+    // Тест случая с произвольным набором элементов
+    Chain2<int> unsortedList;
+    unsortedList.adder.back(170);
+    unsortedList.adder.back(45);
+    unsortedList.adder.back(75);
+    unsortedList.adder.back(90);
+    unsortedList.adder.back(2);
+    unsortedList.adder.back(802);
+    unsortedList.adder.back(24);
+    unsortedList.adder.back(2);
+    unsortedList.radixSort();
+    assert(unsortedList.getSize() == 8);
+    assert(unsortedList.getFirst()->getData() == 2);
+    assert(unsortedList.getLast()->getData() == 802);
+}
 
 int main() {
     testChain2();
     testHIWell();
     testQSnake();
     testPostFix();
+    testRadixSort();
     std::cout << "All tests passed successfully!" << std::endl;
     return 0;
 }
