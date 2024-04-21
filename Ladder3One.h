@@ -100,5 +100,5 @@ public:
     /// ”станавливает выражение
     /// </summary>
     /// <param name="expr"> строка с выражением </param>
-    void setExpression(std::string expr) { expression = expr; }
+    void setExpression(std::string expr) { stack.clear(); expression = expr; }
 };
